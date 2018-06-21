@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     Q_INIT_RESOURCE(resources);
 
     ui->setupUi(this);
+
+    readSettings();
     makeConnections();
 }
 
@@ -114,6 +116,7 @@ void MainWindow::performConversion(const QMimeData *mimeData)
     ui->plainTextEditLibCellMLPrinted->clear();
     ui->plainTextEditXslt->clear();
     if (success) {
+        ui->labelDropTarget->setText(mimeData->text());
         libcellml::Parser parser;
         libcellml::ModelPtr model = parser.parseModel(out.toStdString());
 
@@ -157,4 +160,46 @@ void MainWindow::performConversion(const QMimeData *mimeData)
         ui->textEditReport->insertHtml(messageHandler.statusMessage());
     }
     ui->textEditReport->moveCursor(QTextCursor::End);
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings;
+
+    settings.beginGroup("MainWindow");
+    settings.setValue("size", size());
+    settings.setValue("pos", pos());
+    settings.endGroup();
+    settings.beginGroup("UserInterface");
+    settings.beginGroup("Xslt");
+    settings.setValue("fileName", ui->lineEditOutputFileXsltTransformed->text());
+    settings.endGroup();
+    settings.beginGroup("Printed");
+    settings.setValue("fileName", ui->lineEditOutputFileLibCellMLPrinted->text());
+    settings.endGroup();
+    settings.endGroup();
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings;
+
+    settings.beginGroup("MainWindow");
+    resize(settings.value("size", QSize(400, 400)).toSize());
+    move(settings.value("pos", QPoint(200, 200)).toPoint());
+    settings.endGroup();
+    settings.beginGroup("UserInterface");
+    settings.beginGroup("Xslt");
+    ui->lineEditOutputFileXsltTransformed->setText(settings.value("fileName", QString("")).toString());
+    settings.endGroup();
+    settings.beginGroup("Printed");
+    ui->lineEditOutputFileLibCellMLPrinted->setText(settings.value("fileName", QString("")).toString());
+    settings.endGroup();
+    settings.endGroup();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    writeSettings();
+    event->accept();
 }

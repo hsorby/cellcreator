@@ -14,6 +14,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private slots:
     void aboutActionTriggered();
     void performConversion(const QMimeData *mimeData);
@@ -22,6 +25,8 @@ private slots:
 
 private:
     void makeConnections();
+    void writeSettings();
+    void readSettings();
 
 private:
     Ui::MainWindow *ui;
