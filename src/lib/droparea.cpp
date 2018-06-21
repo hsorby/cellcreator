@@ -18,7 +18,7 @@ DropArea::DropArea(QWidget *parent)
 
 void DropArea::dragEnterEvent(QDragEnterEvent *event)
 {
-    setText(tr("<drop CellML 1.0 of CellML 1.1 model>"));
+    setText(tr("<drop CellML 1.0 or CellML 1.1 model>"));
     setBackgroundRole(QPalette::Highlight);
 
     event->acceptProposedAction();
@@ -54,6 +54,6 @@ void DropArea::dragLeaveEvent(QDragLeaveEvent *event)
 
 void DropArea::clear()
 {
-    setText(tr("<drop CellML 1.0 of CellML 1.1 model>"));
+    setText(tr("<drop CellML 1.0 or CellML 1.1 model>"));
     setBackgroundRole(QPalette::Dark);
 }

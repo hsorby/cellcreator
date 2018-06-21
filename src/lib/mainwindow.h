@@ -30,5 +30,4 @@ private:
 
 private:
     Ui::MainWindow *ui;
-    void writeToFile(const QString &fileName, const QString &content);
 };

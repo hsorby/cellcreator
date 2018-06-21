@@ -9,14 +9,12 @@
 #include <libcellml>
 
 #include "aboutdialog.h"
-#include "messagehandler.h"
+#include "manipulate.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    Q_INIT_RESOURCE(resources);
-
     ui->setupUi(this);
 
     readSettings();
@@ -75,17 +73,6 @@ void MainWindow::saveFileClicked()
     writeToFile(fileName, content);
 }
 
-void MainWindow::writeToFile(const QString &fileName, const QString &content)
-{
-    if (fileName.length() > 0) {
-        QFile outFile(fileName);
-        if (outFile.open(QIODevice::WriteOnly)) {
-            outFile.write(content.toUtf8().constData());
-            outFile.close();
-        }
-    }
-}
-
 void MainWindow::performConversion(const QMimeData *mimeData)
 {
     if (mimeData == nullptr) {
@@ -96,68 +83,27 @@ void MainWindow::performConversion(const QMimeData *mimeData)
         return;
     }
 
-    MessageHandler messageHandler;
-
-    bool success = false;
-    QFile xslt(":/xslt/cellml1to2.xsl");
     QString out = "";
-    if (xslt.open(QIODevice::ReadOnly)) {
-        QXmlQuery query(QXmlQuery::XSLT20);
-        query.setMessageHandler(&messageHandler);
-        success = query.setFocus(QUrl(mimeData->text()));
-        if (success) {
-            query.setQuery(xslt.readAll());
-            success = query.evaluateTo(&out);
-        }
-        xslt.close();
-    }
+    QString msg = "";
+    bool success = xsltTransfrom(mimeData->text(), &out, &msg);
 
     ui->textEditReport->clear();
     ui->plainTextEditLibCellMLPrinted->clear();
     ui->plainTextEditXslt->clear();
     if (success) {
         ui->labelDropTarget->setText(mimeData->text());
-        libcellml::Parser parser;
-        libcellml::ModelPtr model = parser.parseModel(out.toStdString());
 
-        std::ostringstream os;
-        os << "<html xmlns='http://www.w3.org/1999/xhtml/'><body>" << std::endl;
-        os << "<h1><bold>Parsing errors</bold></h1>" << std::endl;
-        if (parser.errorCount() == 0) {
-            os << "<ul><li>No parsing errors.</li></ul>" << std::endl;
-        } else {
-            os << "<ol>" << std::endl;
-            for (size_t i = 0; i < parser.errorCount(); ++i) {
-                os << "<li>" << parser.getError(i)->getDescription() << "</li>" << std::endl;
-            }
-            os << "</ol>" << std::endl;
-        }
-        libcellml::Validator validator;
-        validator.validateModel(model);
-        os << std::endl;
-        os << "<h1><bold>Validation errors</bold></h1>" << std::endl;
-        if (validator.errorCount() == 0) {
-            os << "<ul><li>No validation erros.</li></ul>" << std::endl;
-        } else {
-            os << "<ol>" << std::endl;
-            for (size_t i = 0; i < validator.errorCount(); ++i) {
-                os << "<li>" << validator.getError(i)->getDescription() << "</li>" << std::endl;
-            }
-            os << "</ol>" << std::endl;
-        }
-        os << std::endl << std::endl;
-        os << "</body></html>" << std::endl;
-        ui->textEditReport->insertHtml(os.str().c_str());
+        std::string parseResponse = parseText(out.toStdString());
+        ui->textEditReport->insertHtml(parseResponse.c_str());
 
         ui->plainTextEditXslt->insertPlainText(out);
         ui->plainTextEditXslt->moveCursor(QTextCursor::End);
 
-        libcellml::Printer printer;
-        QString printedForm(printer.printModel(model).c_str());
-        ui->plainTextEditLibCellMLPrinted->insertPlainText(printedForm);
+        std::string printedForm = libCellMLPrintModel(out.toStdString());
+        ui->plainTextEditLibCellMLPrinted->insertPlainText(printedForm.c_str());
         ui->plainTextEditLibCellMLPrinted->moveCursor(QTextCursor::End);
-    } else if (messageHandler.statusMessage().length() > 0) {
-        ui->textEditReport->insertHtml(messageHandler.statusMessage());
+    } else if (msg.length() > 0) {
+        ui->textEditReport->insertHtml(msg);
     }
     ui->textEditReport->moveCursor(QTextCursor::End);
 }

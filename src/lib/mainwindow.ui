@@ -27,7 +27,7 @@
        <bool>true</bool>
       </property>
       <property name="text">
-       <string>&lt;drop CellML 1.0 of CellML 1.1 model&gt;</string>
+       <string>&lt;drop CellML 1.0 or CellML 1.1 model&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
