@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/xslt">
+        <file>cellml1to2.xsl</file>
+    </qresource>
+</RCC>

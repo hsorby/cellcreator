@@ -1,27 +1,37 @@
 
 set(LIBRARY_SRCS
     mainwindow.cpp
-    )
+    aboutdialog.cpp
+    droparea.cpp
+)
 
 set(LIBRARY_HDRS
     mainwindow.h
-    )
+    aboutdialog.h
+    droparea.h
+    messagehandler.h
+)
 
 set(LIBRARY_UI
     mainwindow.ui
-    )
+    aboutdialog.ui
+)
 
-qt4_wrap_cpp(LIBRARY_HDR_MOC ${LIBRARY_HDRS})
-qt4_wrap_ui(LIBRARY_UI_MOC ${LIBRARY_UI})
+set(LIBRARY_RCC
+    resources.qrc
+)
 
-message(STATUS "LIBRARY_HDR_MOC: ${LIBRARY_HDR_MOC}")
-message(STATUS "LIBRARY_UI_MOC: ${LIBRARY_UI_MOC}")
+qt5_wrap_cpp(LIBRARY_HDR_MOC ${LIBRARY_HDRS})
+qt5_wrap_ui(LIBRARY_UI_MOC ${LIBRARY_UI})
+qt5_add_resources(LIBRARY_RES ${LIBRARY_RCC})
 
 add_library(mainwindow SHARED
     ${LIBRARY_SRCS}
+    ${LIBRARY_HDRS}
     ${LIBRARY_HDR_MOC}
     ${LIBRARY_UI_MOC}
-    )
-message(STATUS "taget link libraries: sdfef Qt4::QtGui libcellmlbdfefe")
-target_link_libraries(mainwindow Qt4::QtGui cellml)
+    ${LIBRARY_RES}
+)
+
+target_link_libraries(mainwindow Qt5::Widgets Qt5::XmlPatterns cellml)
 target_include_directories(mainwindow PRIVATE ${CMAKE_CURRENT_BINARY_DIR} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

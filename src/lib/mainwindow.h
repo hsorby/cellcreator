@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QMainWindow>
+#include <QtWidgets>
 
 namespace Ui {
 class MainWindow;
@@ -15,11 +15,15 @@ public:
     ~MainWindow();
 
 private slots:
-    void versionButtonClicked();
+    void aboutActionTriggered();
+    void performConversion(const QMimeData *mimeData);
+    void chooseOutputFileClicked();
+    void saveFileClicked();
 
 private:
     void makeConnections();
 
 private:
     Ui::MainWindow *ui;
+    void writeToFile(const QString &fileName, const QString &content);
 };

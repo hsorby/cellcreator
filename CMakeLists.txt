@@ -1,19 +1,13 @@
 
-
 cmake_minimum_required(VERSION 3.2)
 
 set(PROJECT_NAME CellCreator)
-project(${PROJECT_NAME} VERSION 0.1.0 LANGUAGES CXX)
+project(${PROJECT_NAME} VERSION 0.2.0 LANGUAGES CXX)
 
-find_package(Qt4 REQUIRED QtGui)
+find_package(Qt5 REQUIRED COMPONENTS Core Widgets Gui XmlPatterns)
 
 # Produces a target 'cellml'
 find_package(libCellML REQUIRED)
-
-# Documentation says you need the first line, but turning it
-# on results in an error when linking due to duplicate symbols?
-#set(CMAKE_AUTOMOC ON)
-#set(CMAKE_AUTOUIC ON)
 
 add_subdirectory(src/lib)
 add_subdirectory(src/app)
