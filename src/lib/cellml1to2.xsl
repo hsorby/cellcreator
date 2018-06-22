@@ -91,6 +91,19 @@
 	<xsl:template match="cellml10:reaction | cellml11:reaction">
 	</xsl:template>
 
+	<!-- The connection element should be copied -->
+	<xsl:template match="cellml10:connection | cellml11:connection">
+		<xsl:element name="connection" namespace="http://www.cellml.org/cellml/2.0#">
+			<xsl:copy-of select="@*|cellml10:map_components/@*" />
+			<xsl:copy-of select="@*|cellml11:map_components/@*" />
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+
+	<!-- The map_components element should be ignored -->
+	<xsl:template match="cellml10:map_components | cellml11:map_components">
+	</xsl:template>
+
 	<!-- The cmeta:id attribute becomes an unprefixed attribute on CellML elements -->
 	<xsl:template match="cellml10:*/@cmeta:id | cellml11:*/@cmeta:id">
 		<xsl:attribute name="id">
