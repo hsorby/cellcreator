@@ -41,7 +41,7 @@
 			<!-- Explicit copy of unprefixed attributes that can appear in CellML elements -->
 			<xsl:copy-of select="
 					@name | @units | @initial_value |
-					@units | @prefix | @exponent | @multiplier|
+					@prefix | @exponent | @multiplier |
 					@units_ref | @component_ref | @component |
 					@component_1 | @component_2 | @variable_1 | @variable_2 | @id"/>
 			<xsl:apply-templates select="@* | node()"/>
