@@ -8,7 +8,7 @@
 	xmlns:cellml="http://www.cellml.org/cellml/2.0#"
 	exclude-result-prefixes="cmeta cellml10 cellml11 mathml">
 
-	<xsl:output method="xml" version="2.0" encoding="UTF-8" indent="no"/>
+	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="no"/>
 
 	<!-- Any elements or attributes not specified below will be dropped -->
 	<xsl:template match="* | @*" priority="-1.0">
@@ -43,7 +43,7 @@
 					@name | @units | @initial_value |
 					@prefix | @exponent | @multiplier |
 					@units_ref | @component_ref | @component |
-					@component_1 | @component_2 | @variable_1 | @variable_2 | @id"/>
+					@component_1 | @component_2 | @variable_1 | @variable_2"/>
 			<xsl:apply-templates select="@* | node()"/>
 		</xsl:element>
 	</xsl:template>
