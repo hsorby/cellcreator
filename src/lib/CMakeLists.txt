@@ -21,22 +21,28 @@ add_library(manipulate SHARED
 )
 
 target_link_libraries(manipulate Qt5::Core Qt5::XmlPatterns cellml)
+target_include_directories(manipulate PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_subdirectory(tools)
 
 set(MAINWINDOW_SRCS
     mainwindow.cpp
     aboutdialog.cpp
-    droparea.cpp
+    documentwidget.cpp
+    documentwindow.cpp
 )
 
 set(MAINWINDOW_HDRS
     mainwindow.h
     aboutdialog.h
-    droparea.h
+    documentwidget.h
+    documentwindow.h
 )
 
 set(MAINWINDOW_UI
     mainwindow.ui
     aboutdialog.ui
+    documentwidget.ui
 )
 
 qt5_wrap_cpp(MAINWINDOW_HDR_MOC ${MAINWINDOW_HDRS})
@@ -51,4 +57,3 @@ add_library(mainwindow SHARED
 
 target_link_libraries(mainwindow Qt5::Widgets Qt5::XmlPatterns cellml manipulate)
 target_include_directories(mainwindow PRIVATE ${CMAKE_CURRENT_BINARY_DIR} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-

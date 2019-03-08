@@ -16,192 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
-     <widget class="DropArea" name="labelDropTarget">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="acceptDrops">
-       <bool>true</bool>
-      </property>
-      <property name="text">
-       <string>&lt;drop CellML 1.0 or CellML 1.1 model&gt;</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tabConsole">
-       <attribute name="title">
-        <string>Console</string>
-       </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <property name="leftMargin">
-         <number>4</number>
-        </property>
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="rightMargin">
-         <number>4</number>
-        </property>
-        <property name="bottomMargin">
-         <number>4</number>
-        </property>
-        <item>
-         <widget class="QTextEdit" name="textEditReport"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tabTransformed">
-       <attribute name="title">
-        <string>xslt Transformed</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="leftMargin">
-         <number>4</number>
-        </property>
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="rightMargin">
-         <number>4</number>
-        </property>
-        <property name="bottomMargin">
-         <number>4</number>
-        </property>
-        <item>
-         <widget class="QPlainTextEdit" name="plainTextEditXslt"/>
-        </item>
-        <item>
-         <widget class="QFrame" name="frameXsltTransformed">
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>12</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="labelOutputFileXsltTransformed">
-             <property name="text">
-              <string>Output file:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEditOutputFileXsltTransformed"/>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonOutputFileXsltTransformed">
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonOutputSaveXsltTransformed">
-             <property name="text">
-              <string>Save</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tabPrinted">
-       <attribute name="title">
-        <string>libCellML Printed</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="leftMargin">
-         <number>4</number>
-        </property>
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="rightMargin">
-         <number>4</number>
-        </property>
-        <property name="bottomMargin">
-         <number>4</number>
-        </property>
-        <item>
-         <widget class="QPlainTextEdit" name="plainTextEditLibCellMLPrinted"/>
-        </item>
-        <item>
-         <widget class="QFrame" name="frameLibCellMLPrinted">
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>12</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="labelOutputFileLibCellMLPrinted">
-             <property name="text">
-              <string>Output file:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEditOutputFileLibCellMLPrinted"/>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonOutputFileLibCellMLPrinted">
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonOutputSaveLibCellMLPrinted">
-             <property name="text">
-              <string>Save</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
+     <widget class="QMdiArea" name="mdiArea"/>
     </item>
    </layout>
   </widget>
@@ -218,6 +33,8 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="actionOpen"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
@@ -226,13 +43,28 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuWindow"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+Q</string>
    </property>
    <property name="menuRole">
     <enum>QAction::QuitRole</enum>
@@ -243,14 +75,15 @@
     <string>About</string>
    </property>
   </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>DropArea</class>
-   <extends>QLabel</extends>
-   <header>droparea.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>
