@@ -30,6 +30,7 @@ private slots:
 private:
     enum { MaxRecentFiles = 5 };
 
+    void initialise();
     void makeConnections();
     void writeSettings();
     void readSettings();
@@ -42,11 +43,11 @@ private:
     static bool hasRecentFiles();
     void prependToRecentFiles(const QString &fileName);
     void setRecentFilesVisible(bool visible);
+    void updateWindowMenu();
+    DocumentWindow *activeMdiChild() const;
 
 private:
     Ui::MainWindow *ui;
 
     QAction *recentFileActs[MaxRecentFiles];
-    QAction *recentFileSeparator;
-    QAction *recentFileSubMenuAct;
 };

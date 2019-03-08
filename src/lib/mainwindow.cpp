@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     readSettings();
+    initialise();
     makeConnections();
 }
 
@@ -31,6 +32,22 @@ void MainWindow::makeConnections()
 {
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::aboutActionTriggered);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::openActionTriggered);
+    connect(ui->menuRecent, &QMenu::aboutToShow, this, &MainWindow::updateRecentFileActions);
+    connect(ui->menuWindow, &QMenu::aboutToShow, this, &MainWindow::updateWindowMenu);
+    connect(ui->actionClose, &QAction::triggered, ui->mdiArea, &QMdiArea::closeActiveSubWindow);
+    connect(ui->actionCloseAll, &QAction::triggered, ui->mdiArea, &QMdiArea::closeAllSubWindows);
+    connect(ui->actionTile, &QAction::triggered, ui->mdiArea, &QMdiArea::tileSubWindows);
+    connect(ui->actionCascade, &QAction::triggered, ui->mdiArea, &QMdiArea::cascadeSubWindows);
+    connect(ui->actionNext, &QAction::triggered, ui->mdiArea, &QMdiArea::activateNextSubWindow);
+    connect(ui->actionPrevious, &QAction::triggered, ui->mdiArea, &QMdiArea::activatePreviousSubWindow);
+}
+
+void MainWindow::initialise()
+{
+    for (int i = 0; i < MaxRecentFiles; ++i) {
+        recentFileActs[i] = ui->menuRecent->addAction(QString(), this, &MainWindow::openRecentFile);
+        recentFileActs[i]->setVisible(false);
+    }
 }
 
 void MainWindow::aboutActionTriggered()
@@ -43,8 +60,7 @@ void MainWindow::openActionTriggered()
 {
     QString fileName =  QFileDialog::getOpenFileName(this, "Open Document", QDir::currentPath(),
                                                      "CellML files (*.cellml *.xml) ;; All files (*.*)");
-    if( !fileName.isNull() )
-    {
+    if( !fileName.isNull() ) {
         openFile(fileName);
     }
 }
@@ -56,8 +72,9 @@ bool MainWindow::openFile(const QString &fileName)
         return true;
     }
     const bool succeeded = loadFile(fileName);
-    if (succeeded)
+    if (succeeded) {
         statusBar()->showMessage(tr("File loaded"), 2000);
+    }
     return succeeded;
 }
 
@@ -88,9 +105,10 @@ QMdiSubWindow *MainWindow::findMdiChild(const QString &fileName) const
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
     foreach (QMdiSubWindow *window, ui->mdiArea->subWindowList()) {
-        DocumentWindow *mdiChild = qobject_cast<DocumentWindow *>(window->widget());
-        if (mdiChild->currentFile() == canonicalFilePath)
+        DocumentWindow *mdiChild = qobject_cast<DocumentWindow *>(window);
+        if (mdiChild->currentFile() == canonicalFilePath) {
             return window;
+        }
     }
     return nullptr;
 }
@@ -137,6 +155,51 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
+void MainWindow::updateWindowMenu()
+{
+    ui->menuWindow->clear();
+    ui->menuWindow->addAction(ui->actionClose);
+    ui->menuWindow->addAction(ui->actionCloseAll);
+    ui->menuWindow->addSeparator();
+    ui->menuWindow->addAction(ui->actionTile);
+    ui->menuWindow->addAction(ui->actionCascade);
+    ui->menuWindow->addSeparator();
+    ui->menuWindow->addAction(ui->actionNext);
+    ui->menuWindow->addAction(ui->actionPrevious);
+
+    QList<QMdiSubWindow *> windows = ui->mdiArea->subWindowList();
+    if (!windows.isEmpty()) {
+        ui->menuWindow->addSeparator();
+    }
+
+    for (int i = 0; i < windows.size(); ++i) {
+        QMdiSubWindow *mdiSubWindow = windows.at(i);
+        DocumentWindow *child = qobject_cast<DocumentWindow *>(mdiSubWindow);
+
+        QString text;
+        if (i < 9) {
+            text = tr("&%1 %2").arg(i + 1)
+                               .arg(child->userFriendlyCurrentFile());
+        } else {
+            text = tr("%1 %2").arg(i + 1)
+                              .arg(child->userFriendlyCurrentFile());
+        }
+        QAction *action = ui->menuWindow->addAction(text, mdiSubWindow, [this, mdiSubWindow]() {
+            ui->mdiArea->setActiveSubWindow(mdiSubWindow);
+        });
+        action->setCheckable(true);
+        action ->setChecked(child == activeMdiChild());
+    }
+}
+
+DocumentWindow *MainWindow::activeMdiChild() const
+{
+    if (QMdiSubWindow *activeSubWindow = ui->mdiArea->activeSubWindow())
+        return qobject_cast<DocumentWindow *>(activeSubWindow);
+    return nullptr;
+}
+
+
 static inline QString recentFilesKey() { return QStringLiteral("recentFileList"); }
 static inline QString fileKey() { return QStringLiteral("file"); }
 
@@ -179,16 +242,16 @@ void MainWindow::prependToRecentFiles(const QString &fileName)
     QStringList recentFiles = oldRecentFiles;
     recentFiles.removeAll(fileName);
     recentFiles.prepend(fileName);
-    if (oldRecentFiles != recentFiles)
+    if (oldRecentFiles != recentFiles) {
         writeRecentFiles(recentFiles, settings);
+    }
 
     setRecentFilesVisible(!recentFiles.isEmpty());
 }
 
 void MainWindow::setRecentFilesVisible(bool visible)
 {
-    recentFileSubMenuAct->setVisible(visible);
-    recentFileSeparator->setVisible(visible);
+    ui->menuRecent->setEnabled(visible);
 }
 
 void MainWindow::updateRecentFileActions()
