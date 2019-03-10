@@ -11,6 +11,7 @@
 #include "aboutdialog.h"
 #include "manipulate.h"
 #include "documentwindow.h"
+#include "documentwidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -105,7 +106,7 @@ QMdiSubWindow *MainWindow::findMdiChild(const QString &fileName) const
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
     foreach (QMdiSubWindow *window, ui->mdiArea->subWindowList()) {
-        DocumentWindow *mdiChild = qobject_cast<DocumentWindow *>(window);
+        DocumentWindow *mdiChild = qobject_cast<DocumentWindow *>(window->widget());
         if (mdiChild->currentFile() == canonicalFilePath) {
             return window;
         }
@@ -174,7 +175,7 @@ void MainWindow::updateWindowMenu()
 
     for (int i = 0; i < windows.size(); ++i) {
         QMdiSubWindow *mdiSubWindow = windows.at(i);
-        DocumentWindow *child = qobject_cast<DocumentWindow *>(mdiSubWindow);
+        DocumentWindow *child = qobject_cast<DocumentWindow *>(mdiSubWindow->widget());
 
         QString text;
         if (i < 9) {

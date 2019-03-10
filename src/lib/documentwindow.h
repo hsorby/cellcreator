@@ -6,7 +6,7 @@
 
 class DocumentWidget;
 
-class DocumentWindow : public QMdiSubWindow
+class DocumentWindow : public QWidget
 {
     Q_OBJECT
 

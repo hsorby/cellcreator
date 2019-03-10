@@ -5,10 +5,12 @@
 #include <QtWidgets>
 
 DocumentWindow::DocumentWindow(QWidget *parent)
- : QMdiSubWindow(parent)
+ : QWidget(parent)
 {
     widget = new DocumentWidget(this);
-    this->setWidget(widget);
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(widget);
+    setLayout(layout);
 }
 
 DocumentWindow::~DocumentWindow()
