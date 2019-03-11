@@ -12,6 +12,7 @@
 #include "manipulate.h"
 #include "documentwindow.h"
 #include "documentwidget.h"
+#include "conversiondialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -35,6 +36,7 @@ void MainWindow::makeConnections()
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::openActionTriggered);
     connect(ui->menuRecent, &QMenu::aboutToShow, this, &MainWindow::updateRecentFileActions);
     connect(ui->menuWindow, &QMenu::aboutToShow, this, &MainWindow::updateWindowMenu);
+    connect(ui->menuTools, &QMenu::aboutToShow, this, &MainWindow::updateToolsMenu);
     connect(ui->actionClose, &QAction::triggered, ui->mdiArea, &QMdiArea::closeActiveSubWindow);
     connect(ui->actionCloseAll, &QAction::triggered, ui->mdiArea, &QMdiArea::closeAllSubWindows);
     connect(ui->actionTile, &QAction::triggered, ui->mdiArea, &DocumentArea::tileSubWindows);
@@ -155,6 +157,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     writeSettings();
     event->accept();
+}
+
+void MainWindow::updateToolsMenu()
+{
+    ui->menuTools->clear();
+    QAction *conversionAction = new QAction(tr("Conversion Tool"), this);
+    ui->menuTools->addAction(conversionAction);
+    connect(conversionAction, &QAction::triggered, this, &MainWindow::showConversionDialog);
+
 }
 
 void MainWindow::updateWindowMenu()
@@ -278,4 +289,11 @@ void MainWindow::openRecentFile()
 {
     if (const QAction *action = qobject_cast<const QAction *>(sender()))
         openFile(action->data().toString());
+}
+
+void MainWindow::showConversionDialog()
+{
+    ConversionDialog dlg;
+    dlg.setModal(true);
+    dlg.exec();
 }

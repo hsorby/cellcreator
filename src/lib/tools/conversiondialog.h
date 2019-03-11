@@ -16,6 +16,7 @@ public:
 
 private slots:
     void okButtonClicked();
+    void cancelButtonClicked();
 
     // Drops
     void performConversion(const QMimeData *mimeData);

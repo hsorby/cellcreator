@@ -27,6 +27,9 @@ private slots:
     void updateRecentFileActions();
     void openRecentFile();
 
+    void updateToolsMenu();
+    void showConversionDialog();
+
 private:
     enum { MaxRecentFiles = 5 };
 

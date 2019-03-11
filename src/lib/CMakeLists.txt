@@ -57,5 +57,5 @@ add_library(mainwindow SHARED
     ${MAINWINDOW_UI_MOC}
 )
 
-target_link_libraries(mainwindow Qt5::Widgets Qt5::XmlPatterns cellml manipulate)
+target_link_libraries(mainwindow Qt5::Widgets Qt5::XmlPatterns cellml manipulate tools)
 target_include_directories(mainwindow PRIVATE ${CMAKE_CURRENT_BINARY_DIR} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

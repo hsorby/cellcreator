@@ -24,4 +24,4 @@ add_library(tools SHARED
 )
 
 target_link_libraries(tools Qt5::Widgets manipulate)
-target_include_directories(tools PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(tools PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})

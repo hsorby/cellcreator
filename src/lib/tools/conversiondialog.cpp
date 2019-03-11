@@ -19,6 +19,8 @@ ConversionDialog::~ConversionDialog()
 
 void ConversionDialog::makeConnections()
 {
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &ConversionDialog::okButtonClicked);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &ConversionDialog::cancelButtonClicked);
 //    connect(ui->pushButtonOk, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
     connect(ui->labelDropTarget, &DropArea::dropped, this, &ConversionDialog::performConversion);
     connect(ui->pushButtonOutputFileXsltTransformed, &QPushButton::clicked, this, &ConversionDialog::chooseOutputFileClicked);
@@ -28,6 +30,11 @@ void ConversionDialog::makeConnections()
 }
 
 void ConversionDialog::okButtonClicked()
+{
+    close();
+}
+
+void ConversionDialog::cancelButtonClicked()
 {
     close();
 }
