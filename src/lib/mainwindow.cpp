@@ -101,6 +101,7 @@ bool MainWindow::loadFile(const QString &fileName)
 DocumentWindow *MainWindow::createMdiChild()
 {
     DocumentWindow *child = new DocumentWindow;
+    connect(child, &DocumentWindow::convertFileRequested, this, &MainWindow::convertFileRequestTriggered);
     ui->mdiArea->addSubWindow(child);
 
     return child;
@@ -194,6 +195,14 @@ void MainWindow::updateWindowMenu()
     }
 }
 
+void MainWindow::convertFileRequestTriggered(const QString& fileName)
+{
+    qDebug() << "filename:" << fileName;
+    ConversionDialog dlg(fileName);
+    dlg.setModal(false);
+    dlg.exec();
+}
+
 DocumentWindow *MainWindow::activeMdiChild() const
 {
     if (QMdiSubWindow *activeSubWindow = ui->mdiArea->activeSubWindow())
@@ -282,6 +291,6 @@ void MainWindow::openRecentFile()
 void MainWindow::showConversionDialog()
 {
     ConversionDialog dlg;
-    dlg.setModal(true);
+    dlg.setModal(false);
     dlg.exec();
 }

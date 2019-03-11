@@ -12,10 +12,17 @@ DocumentWindow::DocumentWindow(QWidget *parent)
     layout->addWidget(widget);
     layout->setMargin(0);
     setLayout(layout);
+
+    makeConnections();
 }
 
 DocumentWindow::~DocumentWindow()
 {
+}
+
+void  DocumentWindow::makeConnections()
+{
+    connect(widget, &DocumentWidget::conversionRequested, this, &DocumentWindow::conversionRequestTriggered);
 }
 
 bool DocumentWindow::loadFile(const QString& fileName)
@@ -37,7 +44,11 @@ bool DocumentWindow::loadFile(const QString& fileName)
     setCurrentFile(fileName);
 
     return true;
+}
 
+void DocumentWindow::conversionRequestTriggered()
+{
+    emit convertFileRequested(curFile);
 }
 
 void DocumentWindow::setCurrentFile(const QString &fileName)

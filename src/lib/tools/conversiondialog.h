@@ -11,7 +11,8 @@ class ConversionDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ConversionDialog(QWidget *parent = nullptr);
+    explicit ConversionDialog(QWidget *parent=nullptr);
+    ConversionDialog(const QString& fileName, QWidget *parent=nullptr);
     ~ConversionDialog();
 
 protected:
@@ -32,6 +33,7 @@ private:
     void makeConnections();
     void writeSettings();
     void readSettings();
+    QMimeData *setFileContents(const QString& fileName);
 
 private:
     Ui::ConversionDialog *ui;

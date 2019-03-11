@@ -17,9 +17,14 @@ public:
     QString currentFile() { return curFile; }
     QString userFriendlyCurrentFile();
 
+signals:
+    void convertFileRequested(const QString& fileName);
+
 private:
+    void makeConnections();
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
+    void conversionRequestTriggered();
 
 private:
     DocumentWidget *widget;

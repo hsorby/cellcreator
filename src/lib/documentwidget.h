@@ -2,6 +2,7 @@
 #define DOCUMENTWIDGET_H
 
 #include <QWidget>
+#include <QMenu>
 
 namespace Ui {
 class DocumentWidget;
@@ -16,6 +17,16 @@ public:
     ~DocumentWidget();
 
     void setPlainText(const QString& text);
+    QMenu *createStandardContextMenu();
+
+signals:
+    void conversionRequested();
+
+private slots:
+    void customMenuRequested(const QPoint& pos);
+
+private:
+    void makeConnections();
 
 private:
     Ui::DocumentWidget *ui;

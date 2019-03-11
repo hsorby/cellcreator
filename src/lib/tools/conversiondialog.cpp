@@ -13,6 +13,18 @@ ConversionDialog::ConversionDialog(QWidget *parent) :
     makeConnections();
 }
 
+ConversionDialog::ConversionDialog(const QString& fileName, QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::ConversionDialog)
+{
+    ui->setupUi(this);
+    readSettings();
+    makeConnections();
+    qDebug() << "conversion filename:" << fileName;
+    QMimeData *mimeData = setFileContents(fileName);
+    performConversion(mimeData);
+}
+
 ConversionDialog::~ConversionDialog()
 {
     delete ui;
@@ -71,6 +83,20 @@ void ConversionDialog::saveFileClicked()
     writeToFile(fileName, content);
 }
 
+QMimeData *ConversionDialog::setFileContents(const QString& fileName)
+{
+    QMimeData *mimeData = nullptr;
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        return mimeData;
+    }
+
+    mimeData = new QMimeData;
+    mimeData->setText(fileName);
+
+    return mimeData;
+}
+
 void ConversionDialog::performConversion(const QMimeData *mimeData)
 {
     if (mimeData == nullptr) {
@@ -84,7 +110,10 @@ void ConversionDialog::performConversion(const QMimeData *mimeData)
     QString out = "";
     QString msg = "";
     bool success = xsltTransfrom(mimeData->text(), &out, &msg);
-
+    qDebug() << mimeData->text();
+    qDebug() << out;
+    qDebug() << msg;
+    qDebug() << success;
     ui->textEditReport->clear();
     ui->plainTextEditLibCellMLPrinted->clear();
     ui->plainTextEditXslt->clear();
