@@ -14,6 +14,9 @@ public:
     explicit ConversionDialog(QWidget *parent = nullptr);
     ~ConversionDialog();
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private slots:
     void okButtonClicked();
     void cancelButtonClicked();
@@ -27,6 +30,8 @@ private slots:
 
 private:
     void makeConnections();
+    void writeSettings();
+    void readSettings();
 
 private:
     Ui::ConversionDialog *ui;

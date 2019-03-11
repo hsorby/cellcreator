@@ -9,6 +9,7 @@ ConversionDialog::ConversionDialog(QWidget *parent) :
     ui(new Ui::ConversionDialog)
 {
     ui->setupUi(this);
+    readSettings();
     makeConnections();
 }
 
@@ -105,3 +106,34 @@ void ConversionDialog::performConversion(const QMimeData *mimeData)
     ui->textEditReport->moveCursor(QTextCursor::End);
 }
 
+void ConversionDialog::readSettings()
+{
+     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+     settings.beginGroup("UserInterface");
+     settings.beginGroup("Xslt");
+     ui->lineEditOutputFileXsltTransformed->setText(settings.value("fileName", QString("")).toString());
+     settings.endGroup();
+     settings.beginGroup("Printed");
+     ui->lineEditOutputFileLibCellMLPrinted->setText(settings.value("fileName", QString("")).toString());
+     settings.endGroup();
+     settings.endGroup();
+}
+
+void ConversionDialog::writeSettings()
+{
+     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+     settings.beginGroup("UserInterface");
+     settings.beginGroup("Xslt");
+     settings.setValue("fileName", ui->lineEditOutputFileXsltTransformed->text());
+     settings.endGroup();
+     settings.beginGroup("Printed");
+     settings.setValue("fileName", ui->lineEditOutputFileLibCellMLPrinted->text());
+     settings.endGroup();
+     settings.endGroup();
+}
+
+void ConversionDialog::closeEvent(QCloseEvent *event)
+{
+    writeSettings();
+    event->accept();
+}

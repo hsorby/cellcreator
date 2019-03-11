@@ -44,6 +44,9 @@ void MainWindow::makeConnections()
     connect(ui->actionTabbed, &QAction::triggered, ui->mdiArea, &DocumentArea::tabifySubWindows);
     connect(ui->actionNext, &QAction::triggered, ui->mdiArea, &QMdiArea::activateNextSubWindow);
     connect(ui->actionPrevious, &QAction::triggered, ui->mdiArea, &QMdiArea::activatePreviousSubWindow);
+
+    // Tools connections
+    connect(ui->actionConversionTool, &QAction::triggered, this, &MainWindow::showConversionDialog);
 }
 
 void MainWindow::initialise()
@@ -125,14 +128,6 @@ void MainWindow::writeSettings()
     settings.setValue("size", size());
     settings.setValue("pos", pos());
     settings.endGroup();
-    settings.beginGroup("UserInterface");
-    settings.beginGroup("Xslt");
-//    settings.setValue("fileName", ui->lineEditOutputFileXsltTransformed->text());
-    settings.endGroup();
-    settings.beginGroup("Printed");
-//    settings.setValue("fileName", ui->lineEditOutputFileLibCellMLPrinted->text());
-    settings.endGroup();
-    settings.endGroup();
 }
 
 void MainWindow::readSettings()
@@ -142,14 +137,6 @@ void MainWindow::readSettings()
     settings.beginGroup("MainWindow");
     resize(settings.value("size", QSize(400, 400)).toSize());
     move(settings.value("pos", QPoint(200, 200)).toPoint());
-    settings.endGroup();
-    settings.beginGroup("UserInterface");
-    settings.beginGroup("Xslt");
-//    ui->lineEditOutputFileXsltTransformed->setText(settings.value("fileName", QString("")).toString());
-    settings.endGroup();
-    settings.beginGroup("Printed");
-//    ui->lineEditOutputFileLibCellMLPrinted->setText(settings.value("fileName", QString("")).toString());
-    settings.endGroup();
     settings.endGroup();
 }
 
@@ -162,9 +149,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::updateToolsMenu()
 {
     ui->menuTools->clear();
-    QAction *conversionAction = new QAction(tr("Conversion Tool"), this);
-    ui->menuTools->addAction(conversionAction);
-    connect(conversionAction, &QAction::triggered, this, &MainWindow::showConversionDialog);
+    ui->menuTools->addAction(ui->actionConversionTool);
 
 }
 
@@ -182,7 +167,10 @@ void MainWindow::updateWindowMenu()
     ui->menuWindow->addAction(ui->actionPrevious);
 
     QList<QMdiSubWindow *> windows = ui->mdiArea->subWindowList();
-    if (!windows.isEmpty()) {
+    if (windows.isEmpty()) {
+        ui->menuWindow->setEnabled(false);
+    } else {
+        ui->menuWindow->setEnabled(true);
         ui->menuWindow->addSeparator();
     }
 

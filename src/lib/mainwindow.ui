@@ -73,7 +73,7 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionConversion_Tool"/>
+    <addaction name="actionConversionTool"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuTools"/>
@@ -140,7 +140,7 @@
     <string>Tabbed</string>
    </property>
   </action>
-  <action name="actionConversion_Tool">
+  <action name="actionConversionTool">
    <property name="text">
     <string>Conversion Tool</string>
    </property>
