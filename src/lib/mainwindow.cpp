@@ -37,8 +37,9 @@ void MainWindow::makeConnections()
     connect(ui->menuWindow, &QMenu::aboutToShow, this, &MainWindow::updateWindowMenu);
     connect(ui->actionClose, &QAction::triggered, ui->mdiArea, &QMdiArea::closeActiveSubWindow);
     connect(ui->actionCloseAll, &QAction::triggered, ui->mdiArea, &QMdiArea::closeAllSubWindows);
-    connect(ui->actionTile, &QAction::triggered, ui->mdiArea, &QMdiArea::tileSubWindows);
-    connect(ui->actionCascade, &QAction::triggered, ui->mdiArea, &QMdiArea::cascadeSubWindows);
+    connect(ui->actionTile, &QAction::triggered, ui->mdiArea, &DocumentArea::tileSubWindows);
+    connect(ui->actionCascade, &QAction::triggered, ui->mdiArea, &DocumentArea::cascadeSubWindows);
+    connect(ui->actionTabbed, &QAction::triggered, ui->mdiArea, &DocumentArea::tabifySubWindows);
     connect(ui->actionNext, &QAction::triggered, ui->mdiArea, &QMdiArea::activateNextSubWindow);
     connect(ui->actionPrevious, &QAction::triggered, ui->mdiArea, &QMdiArea::activatePreviousSubWindow);
 }
@@ -164,6 +165,7 @@ void MainWindow::updateWindowMenu()
     ui->menuWindow->addSeparator();
     ui->menuWindow->addAction(ui->actionTile);
     ui->menuWindow->addAction(ui->actionCascade);
+    ui->menuWindow->addAction(ui->actionTabbed);
     ui->menuWindow->addSeparator();
     ui->menuWindow->addAction(ui->actionNext);
     ui->menuWindow->addAction(ui->actionPrevious);

@@ -28,6 +28,7 @@ add_subdirectory(tools)
 set(MAINWINDOW_SRCS
     mainwindow.cpp
     aboutdialog.cpp
+    documentarea.cpp
     documentwidget.cpp
     documentwindow.cpp
 )
@@ -35,6 +36,7 @@ set(MAINWINDOW_SRCS
 set(MAINWINDOW_HDRS
     mainwindow.h
     aboutdialog.h
+    documentarea.h
     documentwidget.h
     documentwindow.h
 )

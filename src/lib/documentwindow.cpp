@@ -7,9 +7,10 @@
 DocumentWindow::DocumentWindow(QWidget *parent)
  : QWidget(parent)
 {
-    widget = new DocumentWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout;
+    widget = new DocumentWidget();
+    QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(widget);
+    layout->setMargin(0);
     setLayout(layout);
 }
 
@@ -34,9 +35,6 @@ bool DocumentWindow::loadFile(const QString& fileName)
     QApplication::restoreOverrideCursor();
 
     setCurrentFile(fileName);
-
-//    connect(document(), &QTextDocument::contentsChanged,
-//            this, &MdiChild::documentWasModified);
 
     return true;
 

@@ -16,12 +16,12 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
-     <widget class="QMdiArea" name="mdiArea">
-      <property name="viewMode">
-       <enum>QMdiArea::TabbedView</enum>
+     <widget class="DocumentArea" name="mdiArea">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="tabsClosable">
-       <bool>true</bool>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
       </property>
      </widget>
     </item>
@@ -65,6 +65,7 @@
     <addaction name="actionCloseAll"/>
     <addaction name="actionTile"/>
     <addaction name="actionCascade"/>
+    <addaction name="actionTabbed"/>
     <addaction name="actionNext"/>
     <addaction name="actionPrevious"/>
    </widget>
@@ -133,7 +134,20 @@
     <string>Next</string>
    </property>
   </action>
+  <action name="actionTabbed">
+   <property name="text">
+    <string>Tabbed</string>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DocumentArea</class>
+   <extends>QFrame</extends>
+   <header>documentarea.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

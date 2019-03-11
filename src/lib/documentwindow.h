@@ -2,7 +2,6 @@
 #pragma once
 
 #include <QWidget>
-#include <QMdiSubWindow>
 
 class DocumentWidget;
 
