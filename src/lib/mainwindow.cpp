@@ -197,8 +197,7 @@ void MainWindow::updateWindowMenu()
 
 void MainWindow::convertFileRequestTriggered(const QString& fileName)
 {
-    qDebug() << "filename:" << fileName;
-    ConversionDialog dlg(fileName);
+    ConversionDialog dlg(fileName, this);
     dlg.setModal(false);
     dlg.exec();
 }
@@ -290,7 +289,7 @@ void MainWindow::openRecentFile()
 
 void MainWindow::showConversionDialog()
 {
-    ConversionDialog dlg;
+    ConversionDialog dlg(this);
     dlg.setModal(false);
     dlg.exec();
 }

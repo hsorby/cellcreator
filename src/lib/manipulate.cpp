@@ -14,6 +14,7 @@ bool xsltTransfrom(const QString &url, QString *out, QString *msg)
 
     bool success = false;
     QFile xslt(":/xslt/cellml1to2.xsl");
+
     if (xslt.open(QIODevice::ReadOnly)) {
         QXmlQuery query(QXmlQuery::XSLT20);
         query.setMessageHandler(&messageHandler);
@@ -21,6 +22,9 @@ bool xsltTransfrom(const QString &url, QString *out, QString *msg)
         if (success) {
             query.setQuery(xslt.readAll());
             success = query.evaluateTo(out);
+            // Having an issue with empty namespaces when using QXmlQuery.
+            // Simply removing the offending namespace for the time being.
+            out->replace(" xmlns=\"\"", "");
         }
         xslt.close();
     }

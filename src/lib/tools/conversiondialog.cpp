@@ -20,7 +20,6 @@ ConversionDialog::ConversionDialog(const QString& fileName, QWidget *parent) :
     ui->setupUi(this);
     readSettings();
     makeConnections();
-    qDebug() << "conversion filename:" << fileName;
     QMimeData *mimeData = setFileContents(fileName);
     performConversion(mimeData);
 }
@@ -110,10 +109,6 @@ void ConversionDialog::performConversion(const QMimeData *mimeData)
     QString out = "";
     QString msg = "";
     bool success = xsltTransfrom(mimeData->text(), &out, &msg);
-    qDebug() << mimeData->text();
-    qDebug() << out;
-    qDebug() << msg;
-    qDebug() << success;
     ui->textEditReport->clear();
     ui->plainTextEditLibCellMLPrinted->clear();
     ui->plainTextEditXslt->clear();
