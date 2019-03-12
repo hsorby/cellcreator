@@ -19,12 +19,14 @@ public:
 
 signals:
     void convertFileRequested(const QString& fileName);
+    void codeGenerationRequested(const QString& fileName);
 
 private:
     void makeConnections();
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
     void conversionRequestTriggered();
+    void codeGenerationRequestTriggered();
 
 private:
     DocumentWidget *widget;

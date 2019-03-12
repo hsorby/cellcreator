@@ -33,7 +33,6 @@ private:
     void makeConnections();
     void writeSettings();
     void readSettings();
-    QMimeData *setFileContents(const QString& fileName);
 
 private:
     Ui::ConversionDialog *ui;

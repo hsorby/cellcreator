@@ -23,6 +23,7 @@ DocumentWindow::~DocumentWindow()
 void  DocumentWindow::makeConnections()
 {
     connect(widget, &DocumentWidget::conversionRequested, this, &DocumentWindow::conversionRequestTriggered);
+    connect(widget, &DocumentWidget::codeGenerationRequested, this, &DocumentWindow::codeGenerationRequestTriggered);
 }
 
 bool DocumentWindow::loadFile(const QString& fileName)
@@ -49,6 +50,11 @@ bool DocumentWindow::loadFile(const QString& fileName)
 void DocumentWindow::conversionRequestTriggered()
 {
     emit convertFileRequested(curFile);
+}
+
+void DocumentWindow::codeGenerationRequestTriggered()
+{
+    emit codeGenerationRequested(curFile);
 }
 
 void DocumentWindow::setCurrentFile(const QString &fileName)

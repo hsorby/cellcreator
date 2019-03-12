@@ -3,6 +3,7 @@
 #include "ui_conversiondialog.h"
 
 #include "manipulate.h"
+#include "utilities.h"
 
 ConversionDialog::ConversionDialog(QWidget *parent) :
     QDialog(parent),
@@ -20,7 +21,7 @@ ConversionDialog::ConversionDialog(const QString& fileName, QWidget *parent) :
     ui->setupUi(this);
     readSettings();
     makeConnections();
-    QMimeData *mimeData = setFileContents(fileName);
+    QMimeData *mimeData = setMimeDataText(fileName, true);
     performConversion(mimeData);
 }
 
@@ -80,20 +81,6 @@ void ConversionDialog::saveFileClicked()
     }
 
     writeToFile(fileName, content);
-}
-
-QMimeData *ConversionDialog::setFileContents(const QString& fileName)
-{
-    QMimeData *mimeData = nullptr;
-    QFile file(fileName);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        return mimeData;
-    }
-
-    mimeData = new QMimeData;
-    mimeData->setText(fileName);
-
-    return mimeData;
 }
 
 void ConversionDialog::performConversion(const QMimeData *mimeData)

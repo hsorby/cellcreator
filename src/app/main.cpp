@@ -2,6 +2,7 @@
 
 #include "mainwindow.h"
 #include "manipulate.h"
+#include "utilities.h"
 
 int main(int argc, char **argv)
 {
@@ -33,7 +34,7 @@ int main(int argc, char **argv)
 
     initialiseResources();
     int result = -1;
-    MainWindow *mw;
+    MainWindow *mw = nullptr;
     if (argc > 1) {
         if (parser.isSet(outputOption) || parser.isSet(xsltOption)) {
             const QStringList args = parser.positionalArguments();

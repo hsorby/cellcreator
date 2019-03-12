@@ -29,8 +29,10 @@ private slots:
 
     void updateToolsMenu();
     void showConversionDialog();
+    void showCodeGenerationDialog();
 
     void convertFileRequestTriggered(const QString& fileName);
+    void codeGenerationFileRequestTriggered(const QString& fileName);
 
 private:
     enum { MaxRecentFiles = 5 };

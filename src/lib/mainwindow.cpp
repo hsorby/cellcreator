@@ -4,15 +4,11 @@
 
 #include <sstream>
 
-#include <QXmlQuery>
-
-#include <libcellml>
-
 #include "aboutdialog.h"
-#include "manipulate.h"
 #include "documentwindow.h"
 #include "documentwidget.h"
 #include "conversiondialog.h"
+#include "codegenerationdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,6 +43,7 @@ void MainWindow::makeConnections()
 
     // Tools connections
     connect(ui->actionConversionTool, &QAction::triggered, this, &MainWindow::showConversionDialog);
+    connect(ui->actionCodeGenerationTool, &QAction::triggered, this, &MainWindow::showCodeGenerationDialog);
 }
 
 void MainWindow::initialise()
@@ -102,6 +99,7 @@ DocumentWindow *MainWindow::createMdiChild()
 {
     DocumentWindow *child = new DocumentWindow;
     connect(child, &DocumentWindow::convertFileRequested, this, &MainWindow::convertFileRequestTriggered);
+    connect(child, &DocumentWindow::codeGenerationRequested, this, &MainWindow::codeGenerationFileRequestTriggered);
     ui->mdiArea->addSubWindow(child);
 
     return child;
@@ -151,6 +149,7 @@ void MainWindow::updateToolsMenu()
 {
     ui->menuTools->clear();
     ui->menuTools->addAction(ui->actionConversionTool);
+    ui->menuTools->addAction(ui->actionCodeGenerationTool);
 
 }
 
@@ -199,6 +198,12 @@ void MainWindow::convertFileRequestTriggered(const QString& fileName)
 {
     ConversionDialog dlg(fileName, this);
     dlg.setModal(false);
+    dlg.exec();
+}
+
+void MainWindow::codeGenerationFileRequestTriggered(const QString& fileName)
+{
+    CodeGenerationDialog dlg(fileName, this);
     dlg.exec();
 }
 
@@ -291,5 +296,11 @@ void MainWindow::showConversionDialog()
 {
     ConversionDialog dlg(this);
     dlg.setModal(false);
+    dlg.exec();
+}
+
+void MainWindow::showCodeGenerationDialog()
+{
+    CodeGenerationDialog dlg(this);
     dlg.exec();
 }

@@ -34,6 +34,43 @@ bool xsltTransfrom(const QString &url, QString *out, QString *msg)
     return success;
 }
 
+bool isCellML(const QString &url, QString *out, QString *msg, QFile &xslt)
+{
+    MessageHandler messageHandler;
+    bool success = false;
+    bool isCellmlFile = false;
+
+    if (xslt.open(QIODevice::ReadOnly)) {
+        QXmlQuery query(QXmlQuery::XSLT20);
+        query.setMessageHandler(&messageHandler);
+        success = query.setFocus(QUrl(url));
+        if (success) {
+            query.setQuery(xslt.readAll());
+            success = query.evaluateTo(out);
+        }
+        xslt.close();
+    }
+
+    if (success && out->contains("model")) {
+        isCellmlFile = true;
+    }
+    *msg = messageHandler.statusMessage();
+
+    return isCellmlFile;
+}
+
+bool isCellML1(const QString &url, QString *out, QString *msg)
+{
+    QFile xslt(":/xslt/iscellml1.xsl");
+    return isCellML(url, out, msg, xslt);
+}
+
+bool isCellML2(const QString &url, QString *out, QString *msg)
+{
+    QFile xslt(":/xslt/iscellml2.xsl");
+    return isCellML(url, out, msg, xslt);
+}
+
 std::string parseText(const std::string &text)
 {
     libcellml::Parser parser;
@@ -70,6 +107,14 @@ std::string parseText(const std::string &text)
     return os.str();
 }
 
+std::string generateCode(const std::string &text)
+{
+    libcellml::Parser parser;
+    libcellml::Generator generator;
+    libcellml::ModelPtr model = parser.parseModel(text);
+    return generator.generateCode(model);
+}
+
 std::string libCellMLPrintModel(const std::string &text)
 {
     libcellml::Printer printer;
@@ -77,17 +122,6 @@ std::string libCellMLPrintModel(const std::string &text)
     libcellml::ModelPtr model = parser.parseModel(text);
 
     return printer.printModel(model);
-}
-
-void writeToFile(const QString &fileName, const QString &content)
-{
-    if (fileName.length() > 0) {
-        QFile outFile(fileName);
-        if (outFile.open(QIODevice::WriteOnly)) {
-            outFile.write(content.toUtf8().constData());
-            outFile.close();
-        }
-    }
 }
 
 void initialiseResources()

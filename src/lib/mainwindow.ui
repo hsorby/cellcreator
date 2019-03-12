@@ -74,6 +74,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionConversionTool"/>
+    <addaction name="actionCodeGenerationTool"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuTools"/>
@@ -148,6 +149,11 @@
   <action name="actionfiller_action">
    <property name="text">
     <string>filler action</string>
+   </property>
+  </action>
+  <action name="actionCodeGenerationTool">
+   <property name="text">
+    <string>Code Generation Tool</string>
    </property>
   </action>
  </widget>

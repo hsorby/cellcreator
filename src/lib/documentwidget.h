@@ -21,6 +21,7 @@ public:
 
 signals:
     void conversionRequested();
+    void codeGenerationRequested();
 
 private slots:
     void customMenuRequested(const QPoint& pos);
