@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include <libcellml>
+
 namespace Ui {
 class CodeGenerationDialog;
 }
@@ -13,7 +15,7 @@ class CodeGenerationDialog : public QDialog
 
 public:
     explicit CodeGenerationDialog(QWidget *parent = nullptr);
-    CodeGenerationDialog(const QString& fileName, QWidget *parent = nullptr);
+    CodeGenerationDialog(libcellml::GeneratorProfile::Profile profile, const QString& fileName, QWidget *parent = nullptr);
     ~CodeGenerationDialog();
 
 private slots:
@@ -26,7 +28,7 @@ private slots:
 
 private:
     void createTab(const QString& title, const QString& content);
-    void generateCode(const QString& fileName);
+    void generateCode(libcellml::GeneratorProfile::Profile profile, const QString& fileName);
     void makeConnections();
     void openFile(const QString& fileName);
 

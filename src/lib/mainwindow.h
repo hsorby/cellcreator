@@ -2,6 +2,8 @@
 
 #include <QtWidgets>
 
+#include <libcellml>
+
 namespace Ui {
 class MainWindow;
 }
@@ -32,7 +34,7 @@ private slots:
     void showCodeGenerationDialog();
 
     void convertFileRequestTriggered(const QString& fileName);
-    void codeGenerationFileRequestTriggered(const QString& fileName);
+    void codeGenerationFileRequestTriggered(libcellml::GeneratorProfile::Profile profile, const QString& fileName);
 
 private:
     enum { MaxRecentFiles = 5 };

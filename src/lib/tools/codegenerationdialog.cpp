@@ -16,13 +16,13 @@ CodeGenerationDialog::CodeGenerationDialog(QWidget *parent) :
     updateUi();
 }
 
-CodeGenerationDialog::CodeGenerationDialog(const QString& fileName, QWidget *parent)
+CodeGenerationDialog::CodeGenerationDialog(libcellml::GeneratorProfile::Profile profile, const QString& fileName, QWidget *parent)
   : QDialog(parent)
   , ui(new Ui::CodeGenerationDialog)
 {
     ui->setupUi(this);
     ui->tabWidget->clear(); // Part of setting up the ui.
-    generateCode(fileName);
+    generateCode(profile, fileName);
     makeConnections();
     updateUi();
 }
@@ -73,7 +73,7 @@ void CodeGenerationDialog::closeButtonClicked()
 void CodeGenerationDialog::generateButtonClicked()
 {
     auto activeWidget = ui->tabWidget->currentWidget();
-    generateCode(activeWidget->toolTip());
+    generateCode(libcellml::GeneratorProfile::Profile::C, activeWidget->toolTip());
 }
 
 void CodeGenerationDialog::createTab(const QString& title, const QString& content)
@@ -105,7 +105,7 @@ void CodeGenerationDialog::openButtonClicked()
     }
 }
 
-void CodeGenerationDialog::generateCode(const QString& fileName)
+void CodeGenerationDialog::generateCode(libcellml::GeneratorProfile::Profile profile, const QString& fileName)
 {
     QMimeData *mimeData = setMimeDataText(fileName, true);
     QString out = "";
@@ -125,7 +125,16 @@ void CodeGenerationDialog::generateCode(const QString& fileName)
     }
 
     if (!cellmlModel.isEmpty()) {
-        std::string generatedCodeString = ::generateCode(cellmlModel.toStdString());
-        createTab(strippedName(fileName) + " C Impl.", generatedCodeString.c_str());
+        GeneratedCode generatedCode = ::generateCode(profile, cellmlModel.toStdString());
+        switch (generatedCode.profile) {
+        case libcellml::GeneratorProfile::Profile::C:
+            createTab(strippedName(fileName) + " C Impl.", generatedCode.implementationCode.c_str());
+            createTab(strippedName(fileName) + " C Inter.", generatedCode.interfaceCode.c_str());
+            break;
+        case libcellml::GeneratorProfile::Profile::PYTHON:
+            createTab(strippedName(fileName) + " Python", generatedCode.implementationCode.c_str());
+            break;
+        }
+
     }
 }

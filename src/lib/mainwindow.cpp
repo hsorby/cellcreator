@@ -204,9 +204,9 @@ void MainWindow::convertFileRequestTriggered(const QString& fileName)
     dlg.exec();
 }
 
-void MainWindow::codeGenerationFileRequestTriggered(const QString& fileName)
+void MainWindow::codeGenerationFileRequestTriggered(libcellml::GeneratorProfile::Profile profile, const QString& fileName)
 {
-    CodeGenerationDialog dlg(fileName, this);
+    CodeGenerationDialog dlg(profile, fileName, this);
     dlg.exec();
 }
 

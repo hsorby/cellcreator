@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <libcellml>
+
 class DocumentWidget;
 
 class DocumentWindow : public QWidget
@@ -19,13 +21,15 @@ public:
 
 signals:
     void convertFileRequested(const QString& fileName);
-    void codeGenerationRequested(const QString& fileName);
+    void codeGenerationRequested(libcellml::GeneratorProfile::Profile profile, const QString& fileName);
+
+private slots:
+    void conversionRequestTriggered();
+    void codeGenerationRequestTriggered(libcellml::GeneratorProfile::Profile profile);
 
 private:
     void makeConnections();
     void setCurrentFile(const QString &fileName);
-    void conversionRequestTriggered();
-    void codeGenerationRequestTriggered();
 
 private:
     DocumentWidget *widget;

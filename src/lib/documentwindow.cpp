@@ -53,12 +53,9 @@ void DocumentWindow::conversionRequestTriggered()
     emit convertFileRequested(curFile);
 }
 
-void DocumentWindow::codeGenerationRequestTriggered()
+void DocumentWindow::codeGenerationRequestTriggered(libcellml::GeneratorProfile::Profile profile)
 {
-    if (const QAction *action = qobject_cast<const QAction *>(sender())) {
-        qDebug() << "I know this sender" << action->text();
-    }
-    emit codeGenerationRequested(curFile);
+    emit codeGenerationRequested(profile, curFile);
 }
 
 void DocumentWindow::setCurrentFile(const QString &fileName)

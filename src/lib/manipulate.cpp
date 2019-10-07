@@ -111,14 +111,22 @@ std::string parseText(const std::string &text)
     return os.str();
 }
 
-std::string generateCode(const std::string &text)
+GeneratedCode generateCode(libcellml::GeneratorProfile::Profile profile, const std::string &text)
 {
     libcellml::Parser parser;
     libcellml::Generator generator;
+    libcellml::GeneratorProfilePtr generatorProfile = std::make_shared<libcellml::GeneratorProfile>();
     libcellml::ModelPtr model = parser.parseModel(text);
 
+    generatorProfile->setProfile(profile);
+    generator.setProfile(generatorProfile);
     generator.processModel(model);
-    return generator.implementationCode();
+
+    GeneratedCode code;
+    code.profile = profile;
+    code.implementationCode = generator.implementationCode();
+    code.interfaceCode = generator.interfaceCode();
+    return code;
 }
 
 std::string libCellMLPrintModel(const std::string &text)
@@ -133,4 +141,9 @@ std::string libCellMLPrintModel(const std::string &text)
 void initialiseResources()
 {
     Q_INIT_RESOURCE(resources);
+}
+
+void registerMetatypes()
+{
+    qRegisterMetaType<libcellml::GeneratorProfile::Profile>("libcellml::GeneratorProfile::Profile");
 }

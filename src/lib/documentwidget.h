@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QMenu>
 
+#include <libcellml>
+
 namespace Ui {
 class DocumentWidget;
 }
@@ -21,10 +23,11 @@ public:
 
 signals:
     void conversionRequested();
-    void codeGenerationRequested();
+    void codeGenerationRequested(libcellml::GeneratorProfile::Profile);
 
 private slots:
     void customMenuRequested(const QPoint& pos);
+    void codeGenerationTriggered();
 
 private:
     void makeConnections();

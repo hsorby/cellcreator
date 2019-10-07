@@ -33,6 +33,7 @@ int main(int argc, char **argv)
     parser.process(*app);
 
     initialiseResources();
+    registerMetatypes();
     int result = -1;
     MainWindow *mw = nullptr;
     if (argc > 1) {
