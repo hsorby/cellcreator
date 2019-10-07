@@ -17,7 +17,18 @@ public:
     ~CodeGenerationDialog();
 
 private slots:
-    void save();
+    void closeButtonClicked();
+    void generateButtonClicked();
+    void loadButtonClicked();
+    void loadAllButtonClicked();
+    void openButtonClicked();
+    void updateUi();
+
+private:
+    void createTab(const QString& title, const QString& content);
+    void generateCode(const QString& fileName);
+    void makeConnections();
+    void openFile(const QString& fileName);
 
 private:
     Ui::CodeGenerationDialog *ui;

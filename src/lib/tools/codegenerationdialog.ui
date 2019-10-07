@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>494</width>
-    <height>456</height>
+    <width>662</width>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,84 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QPlainTextEdit" name="plainTextEdit"/>
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item alignment="Qt::AlignVCenter">
+        <widget class="QWidget" name="widgetDragAndDrop" native="true">
+         <property name="acceptDrops">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Drag and drop a CellML model file</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="tabPosition">
+          <enum>QTabWidget::South</enum>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tab">
+          <attribute name="title">
+           <string>Tab 1</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPlainTextEdit" name="plainTextEdit"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_2">
+          <attribute name="title">
+           <string>Tab 2</string>
+          </attribute>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
    <item>
     <widget class="QFrame" name="frame">
@@ -41,7 +118,33 @@
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_2">
+       <spacer name="horizontalSpacer2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonGenerate">
+        <property name="text">
+         <string>Generate</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -61,14 +164,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonSave">
+       <widget class="QPushButton" name="pushButtonLoadAll">
         <property name="text">
-         <string>Save</string>
+         <string>Load All</string>
         </property>
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer">
+       <spacer name="horizontalSpacer1">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -81,9 +184,9 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonCancel">
+       <widget class="QPushButton" name="pushButtonDismiss">
         <property name="text">
-         <string>Cancel</string>
+         <string>Dismiss</string>
         </property>
        </widget>
       </item>
@@ -95,82 +198,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>pushButtonCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>CodeGenerationDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>434</x>
-     <y>422</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>246</x>
-     <y>227</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButtonLoad</sender>
+   <sender>pushButtonDismiss</sender>
    <signal>clicked()</signal>
    <receiver>CodeGenerationDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>422</y>
+     <x>597</x>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
-     <x>246</x>
-     <y>227</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButtonOpen</sender>
-   <signal>clicked()</signal>
-   <receiver>CodeGenerationDialog</receiver>
-   <slot>open()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>422</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>246</x>
-     <y>227</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButtonSave</sender>
-   <signal>clicked()</signal>
-   <receiver>CodeGenerationDialog</receiver>
-   <slot>save()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>280</x>
-     <y>422</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>246</x>
-     <y>227</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButtonClose</sender>
-   <signal>clicked()</signal>
-   <receiver>CodeGenerationDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>134</x>
-     <y>422</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>246</x>
-     <y>227</y>
+     <x>330</x>
+     <y>318</y>
     </hint>
    </hints>
   </connection>

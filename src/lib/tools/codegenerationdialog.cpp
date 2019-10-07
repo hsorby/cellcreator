@@ -11,6 +11,9 @@ CodeGenerationDialog::CodeGenerationDialog(QWidget *parent) :
     ui(new Ui::CodeGenerationDialog)
 {
     ui->setupUi(this);
+    ui->tabWidget->clear(); // Part of setting up the ui.
+    makeConnections();
+    updateUi();
 }
 
 CodeGenerationDialog::CodeGenerationDialog(const QString& fileName, QWidget *parent)
@@ -18,6 +21,92 @@ CodeGenerationDialog::CodeGenerationDialog(const QString& fileName, QWidget *par
   , ui(new Ui::CodeGenerationDialog)
 {
     ui->setupUi(this);
+    ui->tabWidget->clear(); // Part of setting up the ui.
+    generateCode(fileName);
+    makeConnections();
+    updateUi();
+}
+
+CodeGenerationDialog::~CodeGenerationDialog()
+{
+    delete ui;
+}
+
+void CodeGenerationDialog::makeConnections()
+{
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updateUi()));
+    connect(ui->pushButtonOpen, SIGNAL(clicked()), this, SLOT(openButtonClicked()));
+    connect(ui->pushButtonGenerate, SIGNAL(clicked()), this, SLOT(generateButtonClicked()));
+    connect(ui->pushButtonLoad, SIGNAL(clicked()), this, SLOT(loadButtonClicked()));
+    connect(ui->pushButtonLoadAll, SIGNAL(clicked()), this, SLOT(loadAllButtonClicked()));
+    connect(ui->pushButtonClose, SIGNAL(clicked()), this, SLOT(closeButtonClicked()));
+}
+
+void CodeGenerationDialog::openFile(const QString& fileName)
+{
+    auto content = fileContents(fileName);
+    createTab(strippedName(fileName), content);
+    auto plainTextEdit = ui->tabWidget->currentWidget();
+    plainTextEdit->setToolTip(fileName);
+}
+
+void CodeGenerationDialog::updateUi()
+{
+    bool haveFiles = ui->tabWidget->count() > 0;
+    auto activeWidget = ui->tabWidget->currentWidget();
+    bool activeTabIsGenerated = activeWidget ? activeWidget->toolTip().isEmpty() : false;
+
+    ui->stackedWidget->setCurrentIndex(haveFiles ? 1 : 0);
+    ui->pushButtonGenerate->setEnabled(!activeTabIsGenerated && haveFiles);
+    ui->pushButtonLoad->setEnabled(activeTabIsGenerated);
+    ui->pushButtonLoadAll->setEnabled(activeTabIsGenerated);
+
+    ui->pushButtonClose->setEnabled(haveFiles);
+}
+
+void CodeGenerationDialog::closeButtonClicked()
+{
+    ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+    updateUi();
+}
+
+void CodeGenerationDialog::generateButtonClicked()
+{
+    auto activeWidget = ui->tabWidget->currentWidget();
+    generateCode(activeWidget->toolTip());
+}
+
+void CodeGenerationDialog::createTab(const QString& title, const QString& content)
+{
+    auto plainTextEdit = new QPlainTextEdit();
+    plainTextEdit->setPlainText(content);
+    ui->tabWidget->addTab(plainTextEdit, title);
+}
+
+void CodeGenerationDialog::loadButtonClicked()
+{
+    qDebug() << "return active generated code tab";
+}
+
+void CodeGenerationDialog::loadAllButtonClicked()
+{
+    qDebug() << "return all generated code tabs";
+}
+
+void CodeGenerationDialog::openButtonClicked()
+{
+    const QString settingsPath = "tools/CodeGeneration";
+    QString fileName =  QFileDialog::getOpenFileName(this, "Open Document", previousLocation(settingsPath),
+                                                     "CellML files (*.cellml *.xml) ;; All files (*.*)");
+    if( !fileName.isNull() ) {
+        openFile(fileName);
+        setPreviousLocation(settingsPath, fileDirectory(fileName));
+        updateUi();
+    }
+}
+
+void CodeGenerationDialog::generateCode(const QString& fileName)
+{
     QMimeData *mimeData = setMimeDataText(fileName, true);
     QString out = "";
     QString msg = "";
@@ -31,28 +120,12 @@ CodeGenerationDialog::CodeGenerationDialog(const QString& fileName, QWidget *par
     } else {
         bool cellML2File = isCellML2(mimeData->text(), &out, &msg);
         if (cellML2File) {
-            QFile file(mimeData->text());
-            if (file.open(QFile::ReadOnly | QFile::Text)) {
-                QTextStream in(&file);
-                cellmlModel = in.readAll();
-            }
-            file.close();
+            cellmlModel = fileContents(mimeData->text());
         }
     }
 
     if (!cellmlModel.isEmpty()) {
-        std::string generatedCode = generateCode(cellmlModel.toStdString());
-        qDebug() << generatedCode.c_str();
-        ui->plainTextEdit->setPlainText(generatedCode.c_str());
+        std::string generatedCodeString = ::generateCode(cellmlModel.toStdString());
+        createTab(strippedName(fileName) + " C Impl.", generatedCodeString.c_str());
     }
-}
-
-CodeGenerationDialog::~CodeGenerationDialog()
-{
-    delete ui;
-}
-
-void CodeGenerationDialog::save()
-{
-    qDebug() << "saving";
 }
