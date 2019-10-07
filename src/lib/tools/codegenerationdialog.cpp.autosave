@@ -159,6 +159,5 @@ void CodeGenerationDialog::generateCode(libcellml::GeneratorProfile::Profile pro
             createTab(strippedName(fileName) + " Python", generatedCode.implementationCode.c_str());
             break;
         }
-
     }
 }

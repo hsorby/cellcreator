@@ -20,7 +20,7 @@ public:
 
 private slots:
     void closeButtonClicked();
-    void generateButtonClicked();
+    void codeGenerationTriggered();
     void loadButtonClicked();
     void loadAllButtonClicked();
     void openButtonClicked();
@@ -31,6 +31,7 @@ private:
     void generateCode(libcellml::GeneratorProfile::Profile profile, const QString& fileName);
     void makeConnections();
     void openFile(const QString& fileName);
+    void setupUi();
 
 private:
     Ui::CodeGenerationDialog *ui;

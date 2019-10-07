@@ -6,7 +6,6 @@
 const QString C_CODE_ACTION_TEXT = "C Code";
 const QString PYTHON_CODE_ACTION_TEXT = "Python Code";
 
-
 DocumentWidget::DocumentWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DocumentWidget)
@@ -61,7 +60,6 @@ void DocumentWidget::codeGenerationTriggered()
 {
     libcellml::GeneratorProfile::Profile profile = libcellml::GeneratorProfile::Profile::C;
     if (const QAction *action = qobject_cast<const QAction *>(sender())) {
-        qDebug() << "I know this sender" << action->text();
         if (action->text() == C_CODE_ACTION_TEXT) {
             profile = libcellml::GeneratorProfile::Profile::C;
         } else if (action->text() == PYTHON_CODE_ACTION_TEXT) {
