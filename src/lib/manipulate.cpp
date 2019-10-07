@@ -25,6 +25,10 @@ bool xsltTransfrom(const QString &url, QString *out, QString *msg)
             // Having an issue with empty namespaces when using QXmlQuery.
             // Simply removing the offending namespace for the time being.
             out->replace(" xmlns=\"\"", "");
+            out->replace("cn units", "cn cellml:units");
+            if (out->contains("cellml:units") && !out->contains(" xmlns:cellml=\"http://www.cellml.org/cellml/2.0#\"")) {
+                out->replace("xmlns=\"http://www.cellml.org/cellml/2.0#\"", "xmlns=\"http://www.cellml.org/cellml/2.0#\" xmlns:cellml=\"http://www.cellml.org/cellml/2.0#\"");
+            }
         }
         xslt.close();
     }
@@ -84,7 +88,7 @@ std::string parseText(const std::string &text)
     } else {
         os << "<ol>" << std::endl;
         for (size_t i = 0; i < parser.errorCount(); ++i) {
-            os << "<li>" << parser.getError(i)->getDescription() << "</li>" << std::endl;
+            os << "<li>" << parser.error(i)->description() << "</li>" << std::endl;
         }
         os << "</ol>" << std::endl;
     }
@@ -97,7 +101,7 @@ std::string parseText(const std::string &text)
     } else {
         os << "<ol>" << std::endl;
         for (size_t i = 0; i < validator.errorCount(); ++i) {
-            os << "<li>" << validator.getError(i)->getDescription() << "</li>" << std::endl;
+            os << "<li>" << validator.error(i)->description() << "</li>" << std::endl;
         }
         os << "</ol>" << std::endl;
     }
@@ -112,7 +116,9 @@ std::string generateCode(const std::string &text)
     libcellml::Parser parser;
     libcellml::Generator generator;
     libcellml::ModelPtr model = parser.parseModel(text);
-    return generator.generateCode(model);
+
+    generator.processModel(model);
+    return generator.implementationCode();
 }
 
 std::string libCellMLPrintModel(const std::string &text)

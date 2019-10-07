@@ -5,10 +5,11 @@
 #include <sstream>
 
 #include "aboutdialog.h"
-#include "documentwindow.h"
-#include "documentwidget.h"
-#include "conversiondialog.h"
 #include "codegenerationdialog.h"
+#include "conversiondialog.h"
+#include "documentwidget.h"
+#include "documentwindow.h"
+#include "utilities.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -62,10 +63,12 @@ void MainWindow::aboutActionTriggered()
 
 void MainWindow::openActionTriggered()
 {
-    QString fileName =  QFileDialog::getOpenFileName(this, "Open Document", QDir::currentPath(),
+    const QString settingsPath = "MainWindow/open";
+    QString fileName =  QFileDialog::getOpenFileName(this, "Open Document", previousLocation(settingsPath),
                                                      "CellML files (*.cellml *.xml) ;; All files (*.*)");
     if( !fileName.isNull() ) {
         openFile(fileName);
+        setPreviousLocation(settingsPath, fileDirectory(fileName));
     }
 }
 
@@ -288,8 +291,9 @@ void MainWindow::updateRecentFileActions()
 
 void MainWindow::openRecentFile()
 {
-    if (const QAction *action = qobject_cast<const QAction *>(sender()))
+    if (const QAction *action = qobject_cast<const QAction *>(sender())) {
         openFile(action->data().toString());
+    }
 }
 
 void MainWindow::showConversionDialog()

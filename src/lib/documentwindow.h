@@ -24,7 +24,6 @@ signals:
 private:
     void makeConnections();
     void setCurrentFile(const QString &fileName);
-    QString strippedName(const QString &fullFileName);
     void conversionRequestTriggered();
     void codeGenerationRequestTriggered();
 

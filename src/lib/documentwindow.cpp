@@ -1,8 +1,9 @@
 #include "documentwindow.h"
 
-#include "documentwidget.h"
-
 #include <QtWidgets>
+
+#include "documentwidget.h"
+#include "utilities.h"
 
 DocumentWindow::DocumentWindow(QWidget *parent)
  : QWidget(parent)
@@ -54,6 +55,9 @@ void DocumentWindow::conversionRequestTriggered()
 
 void DocumentWindow::codeGenerationRequestTriggered()
 {
+    if (const QAction *action = qobject_cast<const QAction *>(sender())) {
+        qDebug() << "I know this sender" << action->text();
+    }
     emit codeGenerationRequested(curFile);
 }
 
@@ -64,11 +68,6 @@ void DocumentWindow::setCurrentFile(const QString &fileName)
     //widget->document()->setModified(false);
     setWindowModified(false);
     setWindowTitle(userFriendlyCurrentFile() + "[*]");
-}
-
-QString DocumentWindow::strippedName(const QString &fullFileName)
-{
-    return QFileInfo(fullFileName).fileName();
 }
 
 QString DocumentWindow::userFriendlyCurrentFile()

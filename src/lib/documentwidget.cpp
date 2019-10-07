@@ -39,10 +39,16 @@ void DocumentWidget::customMenuRequested(const QPoint& pos)
     QAction *convertAction = new QAction("Convert to CellML 2.0");
     connect(convertAction, &QAction::triggered, this, &DocumentWidget::conversionRequested);
 
-    QAction *codeGenerationAction = new QAction("Generate Code");
-    connect(codeGenerationAction, &QAction::triggered, this, &DocumentWidget::codeGenerationRequested);
+    QMenu *codeGenerationMenu = new QMenu("Generate Code");
+    QAction *codeGenerationPythonAction = new QAction("C Code");
+    connect(codeGenerationPythonAction, &QAction::triggered, this, &DocumentWidget::codeGenerationRequested);
+    QAction *codeGenerationCAction = new QAction("Python Code");
+    connect(codeGenerationCAction, &QAction::triggered, this, &DocumentWidget::codeGenerationRequested);
+
+    codeGenerationMenu->addAction(codeGenerationCAction);
+    codeGenerationMenu->addAction(codeGenerationPythonAction);
 
     contextMenu->addAction(convertAction);
-    contextMenu->addAction(codeGenerationAction);
+    contextMenu->addMenu(codeGenerationMenu);
     contextMenu->popup(mapToGlobal(pos));
 }
