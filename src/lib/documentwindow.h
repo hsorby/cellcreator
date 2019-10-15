@@ -16,6 +16,7 @@ public:
     ~DocumentWindow();
 
     bool loadFile(const QString& fileName);
+    bool loadText(const QString& text);
     QString currentFile() { return curFile; }
     QString userFriendlyCurrentFile();
 

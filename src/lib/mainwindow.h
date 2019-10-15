@@ -35,6 +35,7 @@ private slots:
 
     void convertFileRequestTriggered(const QString& fileName);
     void codeGenerationFileRequestTriggered(libcellml::GeneratorProfile::Profile profile, const QString& fileName);
+    void loadNewWindow(const QString& text);
 
 private:
     enum { MaxRecentFiles = 5 };

@@ -18,6 +18,9 @@ public:
     CodeGenerationDialog(libcellml::GeneratorProfile::Profile profile, const QString& fileName, QWidget *parent = nullptr);
     ~CodeGenerationDialog();
 
+signals:
+    void loadText(const QString& text);
+
 private slots:
     void closeButtonClicked();
     void codeGenerationTriggered();

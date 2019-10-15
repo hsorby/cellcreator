@@ -109,12 +109,18 @@ void CodeGenerationDialog::createTab(const QString& title, const QString& conten
 
 void CodeGenerationDialog::loadButtonClicked()
 {
-    qDebug() << "return active generated code tab";
+    auto activeWidget = qobject_cast<const QPlainTextEdit *>(ui->tabWidget->currentWidget());
+    emit loadText(activeWidget->toPlainText());
 }
 
 void CodeGenerationDialog::loadAllButtonClicked()
 {
-    qDebug() << "return all generated code tabs";
+    for (int i = 0; i < ui->tabWidget->count(); ++i) {
+        auto widget = qobject_cast<const QPlainTextEdit *>(ui->tabWidget->widget(i));
+        if (widget->toolTip().isEmpty()) {
+            emit loadText(widget->toPlainText());
+        }
+    }
 }
 
 void CodeGenerationDialog::openButtonClicked()
@@ -159,6 +165,5 @@ void CodeGenerationDialog::generateCode(libcellml::GeneratorProfile::Profile pro
             createTab(strippedName(fileName) + " Python", generatedCode.implementationCode.c_str());
             break;
         }
-
     }
 }

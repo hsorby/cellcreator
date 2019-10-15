@@ -108,7 +108,6 @@ DocumentWindow *MainWindow::createMdiChild()
     return child;
 }
 
-
 QMdiSubWindow *MainWindow::findMdiChild(const QString &fileName) const
 {
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
@@ -120,6 +119,16 @@ QMdiSubWindow *MainWindow::findMdiChild(const QString &fileName) const
         }
     }
     return nullptr;
+}
+
+void MainWindow::loadNewWindow(const QString& text)
+{
+    DocumentWindow *child = createMdiChild();
+    if (child->loadText(text)) {
+        child->show();
+    } else {
+        child->close();
+    }
 }
 
 void MainWindow::writeSettings()
@@ -207,13 +216,15 @@ void MainWindow::convertFileRequestTriggered(const QString& fileName)
 void MainWindow::codeGenerationFileRequestTriggered(libcellml::GeneratorProfile::Profile profile, const QString& fileName)
 {
     CodeGenerationDialog dlg(profile, fileName, this);
+    connect(&dlg, &CodeGenerationDialog::loadText, this, &MainWindow::loadNewWindow);
     dlg.exec();
 }
 
 DocumentWindow *MainWindow::activeMdiChild() const
 {
-    if (QMdiSubWindow *activeSubWindow = ui->mdiArea->activeSubWindow())
+    if (QMdiSubWindow *activeSubWindow = ui->mdiArea->activeSubWindow()) {
         return qobject_cast<DocumentWindow *>(activeSubWindow);
+    }
     return nullptr;
 }
 

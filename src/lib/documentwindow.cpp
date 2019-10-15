@@ -48,6 +48,12 @@ bool DocumentWindow::loadFile(const QString& fileName)
     return true;
 }
 
+bool DocumentWindow::loadText(const QString &text)
+{
+    widget->setPlainText(text);
+    return true;
+}
+
 void DocumentWindow::conversionRequestTriggered()
 {
     emit convertFileRequested(curFile);
